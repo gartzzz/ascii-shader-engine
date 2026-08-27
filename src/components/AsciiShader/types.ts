@@ -1,0 +1,90 @@
+// FILE: src/components/AsciiShader/types.ts
+import type React from "react";
+
+export type AsciiPreset = "clean" | "magnetic" | "liquid" | "terminal" | "glitch";
+export type CharsetPreset = "classic" | "dense" | "geometric" | "digital" | "technical" | "minimal";
+export type DitherMode = "none" | "bayer4" | "noise";
+export type InteractionMode = "none" | "push" | "attract";
+export type ColorMode = "monochrome" | "source" | "duotone";
+
+export type AsciiShaderProps = {
+  src: string;
+  sourceType?: "image" | "video";
+  preset?: AsciiPreset;
+  charset?: string;
+  charsetPreset?: CharsetPreset;
+  autoSortCharset?: boolean;
+  glyphVariation?: number;
+  fontFamily?: string;
+  fontWeight?: number | string;
+  cellSize?: number;
+  brightness?: number;
+  contrast?: number;
+  gamma?: number;
+  invert?: boolean;
+  ditherMode?: DitherMode;
+  ditherStrength?: number;
+  interaction?: InteractionMode;
+  mouseRadius?: number;
+  mouseStrength?: number;
+  mouseSmoothing?: number;
+  mouseVelocitySmoothing?: number;
+  mouseVelocityDecay?: number;
+  velocityMultiplier?: number;
+  turbulenceAroundPointer?: number;
+  noiseScale?: number;
+  noiseStrength?: number;
+  noiseSpeed?: number;
+  noiseOctaves?: number;
+  sampleDistortion?: number;
+  glyphDistortion?: number;
+  ripple?: boolean;
+  rippleStrength?: number;
+  rippleFrequency?: number;
+  rippleSpeed?: number;
+  rippleDecay?: number;
+  colorMode?: ColorMode;
+  foregroundColor?: string;
+  backgroundColor?: string;
+  duotoneDark?: string;
+  duotoneLight?: string;
+  grain?: number;
+  scanlines?: number;
+  vignette?: number;
+  flicker?: number;
+  chromaticAberration?: number;
+  glitch?: number;
+  opacity?: number;
+  pointerTarget?: "window" | "canvas";
+  reducedMotion?: boolean | "auto";
+  maxDpr?: number;
+  debug?: boolean;
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+export type ResolvedAsciiOptions = Required<Omit<AsciiShaderProps, "src" | "className" | "style" | "charset" | "preset" | "charsetPreset">> & {
+  src: string;
+  preset: AsciiPreset;
+  charset: string;
+  charsetPreset: CharsetPreset;
+};
+
+export type DebugInfo = {
+  fps: number;
+  cssWidth: number;
+  cssHeight: number;
+  framebufferWidth: number;
+  framebufferHeight: number;
+  dpr: number;
+  cols: number;
+  rows: number;
+  cellSize: number;
+  mouseX: number;
+  mouseY: number;
+  mouseSpeed: number;
+  preset: AsciiPreset;
+  charsetLength: number;
+  sourceWidth: number;
+  sourceHeight: number;
+};
