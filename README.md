@@ -1,19 +1,32 @@
 # Interactive ASCII Shader Engine
 
-GPU-rendered ASCII and Unicode glyph field for React, Three.js and React Three Fiber. The source is sampled with cover semantics, converted to luminance in GLSL, and rendered through a single fullscreen quad and a Canvas 2D glyph atlas.
+GPU-rendered ASCII / glyph field. React version uses Three + R3F; vanilla version is pure WebGL (no dependencies) and works everywhere.
 
-## Install
+## Plug & play — 10 seconds (no build, no npm)
 
-```bash
-npm install three @react-three/fiber
-npm install -D @types/three
+```html
+<div data-ascii-shader data-src="/hero.jpg" data-preset="magnetic" style="width:100%;height:100vh"></div>
+<script src="https://cdn.jsdelivr.net/npm/ascii-shader-engine/dist/ascii-shader.umd.js"></script>
+<!-- auto-inits every [data-ascii-shader] -->
 ```
 
-## Minimal usage
+Vanilla programmatic:
+
+```js
+import { createAsciiShader } from "ascii-shader-engine/vanilla";
+const ctrl = createAsciiShader({ target: "#hero", src: "/hero.jpg", preset: "magnetic" });
+ctrl.update({ preset: "liquid" }); // live
+ctrl.destroy(); // cleanup
+```
+
+## React / Next / Astro
+
+```bash
+npm install ascii-shader-engine three @react-three/fiber
+```
 
 ```tsx
-import { AsciiShader } from "./components/AsciiShader";
-
+import { AsciiShader } from "ascii-shader-engine/react"; // or "./components/AsciiShader"
 <AsciiShader src="/hero.jpg" />
 ```
 

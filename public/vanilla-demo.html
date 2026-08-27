@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vanilla Demo — ASCII Shader (no React)</title><style>html,body{margin:0;height:100%;background:#111} #hero{width:100%;height:100vh}</style></head>
+<body>
+<div id="hero" data-ascii-shader data-src="/demo.svg" data-preset="magnetic" style="width:100%;height:100vh"></div>
+<script type="module">
+import { createAsciiShader } from "/src/vanilla/index.ts";
+// Alternative programmatic usage (uncomment to test):
+// createAsciiShader({ target: "#hero", src: "/demo.svg", preset: "magnetic", colorMode: "monochrome" });
+</script>
+</body></html>

@@ -29,7 +29,9 @@ function App() {
     reader.onload = () => { if (typeof reader.result === "string") setSource(reader.result); };
     reader.readAsDataURL(file);
   };
-  const exportSnippet = async () => { setExported(snippet); try { await navigator.clipboard.writeText(snippet); } catch { /* Clipboard permissions are optional. */ } };
+  const vanillaSnippet = `<div data-ascii-shader data-src="${source.startsWith("data:") ? "/your-image.jpg" : source}" data-preset="${preset}" style="width:100%;height:100vh"></div>\n<script src="https://cdn.jsdelivr.net/npm/ascii-shader-engine/dist/ascii-shader.umd.js"><\/script>\n<!-- local: <script src="/ascii-shader.umd.js"><\/script> -->`;
+  const vanillaJsSnippetLocal = `import { createAsciiShader } from "ascii-shader-engine/vanilla";\ncreateAsciiShader({ target: "#hero", src: "${source.startsWith("data:") ? "/your-image.jpg" : source}", preset: "${preset}", colorMode: "${colorMode}" });`;
+  const exportSnippet = async (text: string) => { setExported(text); try { await navigator.clipboard.writeText(text); } catch { /* clipboard optional */ } };
   const exportShader = () => { const blob = new Blob([fragmentShader], { type: "text/plain" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "ascii-shader.frag"; link.click(); URL.revokeObjectURL(url); };
   const exportStandalone = async () => { try { const html = buildStandaloneHtml(await sourceAsDataUrl(source)); const blob = new Blob([html], { type: "text/html" }); const url = URL.createObjectURL(blob); const link = document.createElement("a"); link.href = url; link.download = "ascii-shader-standalone.html"; link.click(); URL.revokeObjectURL(url); } catch { window.alert("No se pudo incrustar la imagen actual. Usa una imagen local o permite CORS."); } };
   return (
@@ -68,8 +70,9 @@ function App() {
           <label>Format<select value={format} onChange={(event) => setFormat(event.target.value as typeof format)}><option value="fullscreen">fullscreen</option><option value="landscape">16:9 landscape</option><option value="portrait">4:5 portrait</option><option value="square">1:1 square</option><option value="story">9:16 story</option></select></label>
         </div>
         <div className="color-controls"><label>Color mode<select value={colorMode} onChange={(event) => setColorMode(event.target.value as typeof colorMode)}><option>monochrome</option><option>source</option><option>duotone</option></select></label><label>Foreground<input type="color" value={foregroundColor} onChange={(event) => setForegroundColor(event.target.value)} /></label><label>Background<input type="color" value={backgroundColor} onChange={(event) => setBackgroundColor(event.target.value)} /></label>{colorMode === "duotone" && <><label>Dark tone<input type="color" value={duotoneDark} onChange={(event) => setDuotoneDark(event.target.value)} /></label><label>Light tone<input type="color" value={duotoneLight} onChange={(event) => setDuotoneLight(event.target.value)} /></label></>}</div>
-        <div className="panel-actions"><button type="button" onClick={() => setDebug((value) => !value)}>Debug {debug ? "on" : "off"}</button><button type="button" onClick={exportShader}>Download GLSL</button><button type="button" onClick={exportStandalone}>Standalone HTML</button><button type="button" className="primary" onClick={exportSnippet}>Copy JSX</button></div>
-        {exported && <textarea className="export-box" readOnly value={exported} onFocus={(event) => event.currentTarget.select()} aria-label="Exported JSX" />}
+        <div className="panel-actions"><button type="button" onClick={() => setDebug((value) => !value)}>Debug {debug ? "on" : "off"}</button><button type="button" onClick={exportShader}>GLSL</button><button type="button" onClick={exportStandalone}>Standalone</button></div>
+        <div className="panel-actions"><button type="button" onClick={() => exportSnippet(snippet)}>Copy JSX</button><button type="button" onClick={() => exportSnippet(vanillaSnippet)}>Copy HTML</button><button type="button" className="primary" onClick={() => exportSnippet(vanillaJsSnippetLocal)}>Copy Vanilla</button></div>
+        {exported && <textarea className="export-box" readOnly value={exported} onFocus={(event) => event.currentTarget.select()} aria-label="Exported snippet" />}
       </aside>
     </main>
   );
